@@ -1,15 +1,16 @@
 import 'package:first_project/components/difficulty.dart';
+import 'package:first_project/data/task_dao.dart';
 import 'package:flutter/material.dart';
 
 class Task extends StatefulWidget {
   final String name;
-  final String picture;
-  final int difficultyLevel;
+  final String image;
+  final int difficulty;
 
   Task(
       {required this.name,
-      required this.picture,
-      required this.difficultyLevel,
+      required this.image,
+      required this.difficulty,
       Key? key})
       : super(key: key);
 
@@ -21,10 +22,8 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-
-
   bool assetOrNetwork() {
-    if (widget.picture.contains('http')) {
+    if (widget.image.contains('http')) {
       return false;
     }
     return true;
@@ -96,7 +95,7 @@ class _TaskState extends State<Task> {
                                     left:
                                         MediaQuery.of(context).size.width / 8),
                                 child: Difficulty(
-                                    difficultyLevel: widget.difficultyLevel),
+                                    difficultyLevel: widget.difficulty),
                               ),
                             ],
                           ),
@@ -110,10 +109,14 @@ class _TaskState extends State<Task> {
                                   backgroundColor: colorSet(),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30))),
+                              onLongPress: () {
+                                TaskDao().delete(widget.name);
+                              },
                               onPressed: () {
                                 setState(() {
                                   widget.level++;
-                                  if (((widget.level / widget.difficultyLevel) / 10) >=
+                                  if (((widget.level / widget.difficulty) /
+                                          10) >=
                                       1) {
                                     widget.difficultyCounter++;
                                     widget.level = 0;
@@ -159,14 +162,13 @@ class _TaskState extends State<Task> {
                 borderRadius: BorderRadius.circular(16.0),
                 child: assetOrNetwork()
                     ? Image.asset(
-                        widget.picture,
+                        widget.image,
                         fit: BoxFit.cover,
                       )
                     : Image.network(
-                        widget.picture,
+                        widget.image,
                         fit: BoxFit.cover,
-                      )
-            ),
+                      )),
           ),
           Positioned(
             left: MediaQuery.of(context).size.width / 3,
@@ -181,8 +183,8 @@ class _TaskState extends State<Task> {
                           child: LinearProgressIndicator(
                             color: Colors.white,
                             backgroundColor: Colors.white60,
-                            value: (widget.difficultyLevel > 0)
-                                ? ((widget.level / widget.difficultyLevel) / 10)
+                            value: (widget.difficulty > 0)
+                                ? ((widget.level / widget.difficulty) / 10)
                                 : 1.0,
                           ),
                         ),
