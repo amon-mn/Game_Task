@@ -1,6 +1,6 @@
 
 
-## 📱 Project: Simple Journal
+## 📱 Project: Gamified Tasks
 
 * My first project with Flutter
 * A gamified personal organization application that allows you to save, edit and delete user tasks \0/
